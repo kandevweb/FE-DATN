@@ -3,8 +3,8 @@ interface SuccessResponse<Data> {
   data: Data
 }
 
-interface ErrorResponse<Data> {
+interface ErrorResponse<Data = undefined> {
   message: string
   status: number
-  errors: Data
+  errors?: Data
 }

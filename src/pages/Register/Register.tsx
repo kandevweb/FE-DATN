@@ -1,6 +1,35 @@
+import { yupResolver } from '@hookform/resolvers/yup'
 import { IonIcon } from '@ionic/react'
+import { useForm } from 'react-hook-form'
+import { Link, useNavigate } from 'react-router-dom'
+import { RegisterForm, registerSchema } from '~/utils/rules'
+import useMutationRegister from './hooks/useMutationRegister'
+import { toast } from 'react-toastify'
 
 function Register() {
+  const navigate = useNavigate()
+  const registerMutation = useMutationRegister()
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<RegisterForm>({
+    resolver: yupResolver(registerSchema)
+  })
+
+  const handleRegister = handleSubmit((data) => {
+    registerMutation.mutate(data, {
+      onSuccess: () => {
+        toast.warn('Xác nhận email của bạn!')
+        navigate(`/confirm_otp/${data.email}`)
+      },
+      onError: (error) => {
+        toast.error(error.message)
+      }
+    })
+  })
+
   return (
     <div className='sm:flex'>
       <div className='relative z-10 flex min-h-screen w-full items-center bg-white p-10 pt-10 shadow-xl md:w-96 lg:w-[580px] dark:bg-slate-900'>
@@ -25,118 +54,116 @@ function Register() {
           </div>
           {/* title */}
           <div>
-            <h2 className='mb-1.5 text-2xl font-semibold'> Sign up to get started </h2>
+            <h2 className='mb-1.5 text-2xl font-semibold'> Đăng ký tài khoản ngay </h2>
             <p className='text-sm font-normal text-gray-700'>
-              If you already have an account,
-              <a href='form-login.html' className='text-blue-700'>
-                Login here!
-              </a>
+              Nếu bạn đã có tài khoản,
+              <Link to={'/login'} className='text-blue-700'>
+                Đăng nhập tại đây!
+              </Link>
             </p>
           </div>
           {/* form */}
           <form
-            method='#'
-            action='#'
+            onSubmit={handleRegister}
             className='space-y-7 text-sm font-medium text-black dark:text-white'
             uk-scrollspy='target: > *; cls: uk-animation-scale-up; delay: 100 ;repeat: true'
           >
             <div className='grid grid-cols-2 gap-4 gap-y-7'>
-              {/* first name */}
               <div>
-                <label htmlFor='email' className=''>
-                  First name
-                </label>
+                <label className=''>Họ</label>
                 <div className='mt-2.5'>
                   <input
-                    id='text'
-                    name='text'
                     type='text'
-                    placeholder='First name'
+                    placeholder='Nguyễn'
                     className='!w-full !rounded-lg !border-slate-200 !bg-transparent !shadow-sm dark:!border-slate-800 dark:!bg-white/5'
+                    {...register('last_name')}
                   />
                 </div>
+                <span className='mt-2 block text-red-500'>{errors.last_name?.message}</span>
               </div>
-              {/* Last name */}
               <div>
-                <label htmlFor='email' className=''>
-                  Last name
-                </label>
+                <label className=''>Tên</label>
                 <div className='mt-2.5'>
                   <input
-                    id='text'
-                    name='text'
                     type='text'
-                    placeholder='Last name'
+                    placeholder='An'
                     className='!w-full !rounded-lg !border-slate-200 !bg-transparent !shadow-sm dark:!border-slate-800 dark:!bg-white/5'
+                    {...register('first_name')}
                   />
                 </div>
+                <span className='mt-2 block text-red-500'>{errors.first_name?.message}</span>
               </div>
-              {/* email */}
               <div className='col-span-2'>
-                <label htmlFor='email' className=''>
-                  Email address
-                </label>
+                <label className=''>Địa chỉ email</label>
                 <div className='mt-2.5'>
                   <input
-                    id='email'
-                    name='email'
-                    type='email'
-                    placeholder='Email'
+                    type='text'
+                    placeholder='kanisdev@gmail.com'
                     className='!w-full !rounded-lg !border-slate-200 !bg-transparent !shadow-sm dark:!border-slate-800 dark:!bg-white/5'
+                    {...register('email')}
                   />
+                  <span className='mt-2 block text-red-500'>{errors.email?.message}</span>
                 </div>
               </div>
-              {/* password */}
               <div>
-                <label htmlFor='email' className=''>
-                  Password
-                </label>
+                <label className=''>Mật khẩu</label>
                 <div className='mt-2.5'>
                   <input
-                    id='password'
-                    name='password'
                     type='password'
-                    placeholder='***'
+                    placeholder='*****'
                     className='!w-full !rounded-lg !border-slate-200 !bg-transparent !shadow-sm dark:!border-slate-800 dark:!bg-white/5'
+                    {...register('password')}
                   />
                 </div>
+                <span className='mt-2 block text-red-500'>{errors.password?.message}</span>
               </div>
-              {/* Confirm Password */}
               <div>
-                <label htmlFor='email' className=''>
-                  Confirm Password
-                </label>
+                <label className=''>Xác nhận mật khẩu</label>
                 <div className='mt-2.5'>
                   <input
-                    id='password'
-                    name='password'
                     type='password'
-                    placeholder='***'
+                    placeholder='******'
                     className='!w-full !rounded-lg !border-slate-200 !bg-transparent !shadow-sm dark:!border-slate-800 dark:!bg-white/5'
+                    {...register('confirm_password')}
                   />
                 </div>
+                <span className='mt-2 block text-red-500'>{errors.confirm_password?.message}</span>
+              </div>
+              <div className='col-span-2'>
+                <div>
+                  <label className='mr-4 inline-block'>Giới tính</label>
+                  <input type='radio' value={0} className='mr-1' id='male' {...register('gender')} />{' '}
+                  <label htmlFor='male' className='cursor-pointer'>
+                    Nam
+                  </label>
+                  <input type='radio' value={1} className='ml-6 mr-2' id='female' {...register('gender')} />{' '}
+                  <label htmlFor='female' className='cursor-pointer'>
+                    Nữ
+                  </label>
+                </div>
+                <span className='mt-2 block text-red-500'>{errors.gender?.message}</span>
               </div>
               <div className='col-span-2'>
                 <label className='inline-flex items-center' id='rememberme'>
                   <input type='checkbox' id='accept-terms' className='!rounded-md accent-red-800' />
                   <span className='ml-2'>
-                    you agree to our
+                    Bạn đồng ý với chúng tôi {''}
                     <a href='#' className='text-blue-700 hover:underline'>
-                      terms of use
+                      điều khoản sử dụng
                     </a>
                   </span>
                 </label>
               </div>
               {/* submit button */}
               <div className='col-span-2'>
-                <button type='submit' className='button w-full bg-primary text-white'>
-                  Get Started
+                <button type='submit' className='button w-full bg-primary py-2 text-sm text-white'>
+                  Đăng ký
                 </button>
               </div>
             </div>
             <div className='flex items-center gap-6 text-center'>
               <hr className='flex-1 border-slate-200 dark:border-slate-800' />
-              Or continue with
+              Hoặc tiếp tục với
               <hr className='flex-1 border-slate-200 dark:border-slate-800' />
             </div>
             {/* social login */}
@@ -145,7 +172,7 @@ function Register() {
               uk-scrollspy='target: > *; cls: uk-animation-scale-up; delay: 400 ;repeat: true'
             >
               <a href='#' className='button flex flex-1 items-center gap-2 bg-primary text-sm text-white'>
-                <IonIcon name='logo-facebook' className='text-lg' /> facebook
+                <IonIcon icon='logo-facebook' className='text-lg' /> facebook
               </a>
               <a href='#' className='button flex flex-1 items-center gap-2 bg-sky-600 text-sm text-white'>
                 <IonIcon icon='logo-twitter' className='text-lg' /> twitter
@@ -163,7 +190,7 @@ function Register() {
           <ul className='uk-slideshow-items h-full w-full'>
             <li className='w-full'>
               <img
-                src='https://images.unsplash.com/photo-1539627831859-a911cf04d3cd?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+                src='https://images.unsplash.com/photo-1563986768494-4dee2763ff3f?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
                 alt=''
                 className='uk-animation-kenburns uk-animation-reverse uk-transform-origin-center-left h-full w-full object-cover'
               />
@@ -172,13 +199,12 @@ function Register() {
                   className='relative z-30 mx-auto w-full max-w-xl px-5 pb-32'
                   uk-scrollspy='target: > *; cls: uk-animation-scale-up; delay: 100 ;repeat: true'
                 >
-                  <img className='w-12' src='assets/images/logo-icon.png' alt='Socialite html template' />
                   <h4 className='mt-7 text-2xl font-semibold !text-white' uk-slideshow-parallax='y: 600,0,0'>
-                    Connect With Friends
+                    Kết nối với bạn bè
                   </h4>
                   <p className='mt-7 text-lg leading-8 !text-white' uk-slideshow-parallax='y: 800,0,0;'>
-                    This phrase is more casual and playful. It suggests that you are keeping your friends updated on
-                    what’s happening in your life.
+                    Cụm từ này giản dị và vui tươi hơn. Nó gợi ý rằng bạn đang cập nhật cho bạn bè về những gì đang xảy
+                    ra trong cuộc sống của bạn.
                   </p>
                 </div>
               </div>
@@ -186,7 +212,7 @@ function Register() {
             </li>
             <li className='w-full'>
               <img
-                src='https://images.unsplash.com/photo-1606812667169-0e1991ed3742?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+                src='https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
                 alt=''
                 className='uk-animation-kenburns uk-animation-reverse uk-transform-origin-center-left h-full w-full object-cover'
               />
@@ -195,13 +221,12 @@ function Register() {
                   className='relative z-30 mx-auto w-full max-w-xl px-5 pb-32'
                   uk-scrollspy='target: > *; cls: uk-animation-scale-up; delay: 100 ;repeat: true'
                 >
-                  <img className='w-12' src='assets/images/logo-icon.png' alt='Socialite html template' />
                   <h4 className='mt-7 text-2xl font-semibold !text-white' uk-slideshow-parallax='y: 800,0,0'>
-                    Connect With Friends
+                    Kết nối với bạn bè
                   </h4>
                   <p className='mt-7 text-lg leading-8 !text-white' uk-slideshow-parallax='y: 800,0,0;'>
-                    This phrase is more casual and playful. It suggests that you are keeping your friends updated on
-                    what’s happening in your life.
+                    Cụm từ này giản dị và vui tươi hơn. Nó gợi ý rằng bạn đang cập nhật cho bạn bè về những gì đang xảy
+                    ra trong cuộc sống của bạn.
                   </p>
                 </div>
               </div>

@@ -10,12 +10,12 @@ function MainLayout({ children }: Props) {
     <>
       <Header />
       <Sidebar />
-      <div
+      <main
         id='site__main'
-        className='mt-[--m-top] h-[calc(100vh-var(--m-top))] p-2.5 xl:ml-[--w-side-sm] 2xl:ml-[--w-side]'
+        className='mt-[--m-top]  h-[calc(100vh-var(--m-top))] p-2.5 xl:ml-[--w-side-sm] 2xl:ml-[--w-side]'
       >
-        <div className='mx-auto max-w-[1065px] 2xl:max-w-[1220px]'>{children}</div>
-      </div>
+        {children}
+      </main>
     </>
   )
 }

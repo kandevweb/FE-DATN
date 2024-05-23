@@ -1,4 +1,5 @@
 import { IonIcon } from '@ionic/react'
+import { Link } from 'react-router-dom'
 
 function Sidebar() {
   return (
@@ -26,10 +27,10 @@ function Sidebar() {
                   <nav id='side'>
                     <ul>
                       <li className='active'>
-                        <a href='feed.html'>
+                        <Link to={'/'}>
                           <img src='src/assets/images/icons/home.png' alt='feeds' className='w-6' />
                           <span> Bảng tin </span>
-                        </a>
+                        </Link>
                       </li>
                       <li>
                         <a href='messages.html'>
@@ -131,7 +132,7 @@ function Sidebar() {
                   </nav>
                   <div className='mt-2 border-t pt-3 text-sm font-medium text-black dark:border-slate-800 dark:text-white'>
                     <div className='px-3 pb-2 text-sm font-medium'>
-                      <div className='text-black dark:text-white'>Shortcut</div>
+                      <div className='text-black dark:text-white'>Phím tắt</div>
                     </div>
                     <a href='#'>
                       <div className='flex items-center gap-2 rounded-xl p-3 px-4 hover:bg-secondery'>

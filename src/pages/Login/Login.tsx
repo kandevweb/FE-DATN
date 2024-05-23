@@ -6,6 +6,7 @@ import useMutationLogin from './hooks/useMutationLogin'
 import { isAxiosError } from '~/utils/utils'
 import { toast } from 'react-toastify'
 import useAuthStore from '~/store/auth.store'
+import { Link } from 'react-router-dom'
 
 function Login() {
   const { setIsAuthenticated, setProfile } = useAuthStore()
@@ -33,11 +34,13 @@ function Login() {
           if (error.response) {
             const formError = error.response.data.errors
 
-            Object.keys(formError).forEach((key) => {
-              setError(key as keyof LoginForm, {
-                message: formError[key as keyof LoginForm]
+            if (formError) {
+              Object.keys(formError).forEach((key) => {
+                setError(key as keyof LoginForm, {
+                  message: formError[key as keyof LoginForm]
+                })
               })
-            })
+            }
           }
         }
       }
@@ -75,9 +78,9 @@ function Login() {
             <h2 className='mb-1.5 text-2xl font-semibold'> Đăng nhập tài khoản của bạn </h2>
             <p className='text-sm font-normal text-gray-700'>
               Nếu bạn chưa có tài khoản.
-              <a href='form-register.html' className='text-blue-700'>
+              <Link to={'/register'} className='text-blue-700'>
                 Đăng ký tại đây!
-              </a>
+              </Link>
             </p>
           </div>
           {/* form */}

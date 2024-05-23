@@ -5,6 +5,9 @@ import Login from '~/pages/Login'
 import Register from '~/pages/Register'
 import ProtectedRoute from './components/ProtectedRoute'
 import RejectedRoute from './components/RejectedRoute'
+import Profile from '~/pages/Profile/Profile'
+import ConfirmOTP from '~/pages/ConfirmOTP'
+import NotFound from '~/pages/NotFound/NotFound'
 
 function useRouteElements() {
   const routeElements = useRoutes([
@@ -17,6 +20,14 @@ function useRouteElements() {
           element: (
             <MainLayout>
               <Home />
+            </MainLayout>
+          )
+        },
+        {
+          path: '/profile',
+          element: (
+            <MainLayout>
+              <Profile />
             </MainLayout>
           )
         }
@@ -35,6 +46,14 @@ function useRouteElements() {
           element: <Register />
         }
       ]
+    },
+    {
+      path: '/confirm_otp/:email',
+      element: <ConfirmOTP />
+    },
+    {
+      path: '*',
+      element: <NotFound />
     }
   ])
 

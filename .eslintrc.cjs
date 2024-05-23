@@ -55,7 +55,6 @@ module.exports = {
     'no-unexpected-multiline': 'warn',
     'jsx-quotes': ['warn', 'prefer-single'],
 
-    indent: ['warn', 2],
     semi: [1, 'never'],
     quotes: ['error', 'single'],
     eqeqeq: 'error',

@@ -21,6 +21,21 @@ class Http {
       }
     })
 
+    // Request
+    this.instance.interceptors.request.use(
+      (config) => {
+        if (this.access_token) {
+          config.headers.Authorization = this.access_token
+          return config
+        }
+        return config
+      },
+      (error) => {
+        return Promise.reject(error)
+      }
+    )
+
+    // Response
     this.instance.interceptors.response.use(
       (response) => {
         const { url } = response.config
